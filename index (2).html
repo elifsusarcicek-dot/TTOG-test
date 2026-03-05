@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangi TOG Kadınısın?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111111;
+    --red: #cc0000;
+    --red-bright: #ff2222;
+    --red-dark: #880000;
+    --white: #f5f5f5;
+    --gray: #888888;
+    --text: #f0f0f0;
+    --px: 3px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 32px, rgba(204,0,0,0.03) 32px, rgba(204,0,0,0.03) 33px),
+      repeating-linear-gradient(90deg, transparent, transparent 32px, rgba(204,0,0,0.03) 32px, rgba(204,0,0,0.03) 33px);
+  }
+
+  .container { width: 100%; max-width: 700px; }
+
+  .pixel-box {
+    background: var(--panel);
+    border: var(--px) solid var(--red);
+    box-shadow:
+      0 0 0 var(--px) var(--bg),
+      0 0 0 calc(var(--px)*2) var(--red),
+      0 8px 40px rgba(204,0,0,0.3);
+    padding: 36px 32px;
+    position: relative;
+  }
+
+  .corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    background: var(--red);
+  }
+  .corner.tl { top: -3px; left: -3px; }
+  .corner.tr { top: -3px; right: -3px; }
+  .corner.bl { bottom: -3px; left: -3px; }
+  .corner.br { bottom: -3px; right: -3px; }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .header { text-align: center; margin-bottom: 36px; }
+
+  .header .tag {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--gray);
+    letter-spacing: 4px;
+    display: block;
+    margin-bottom: 14px;
+    animation: blink 1.4s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .header h1 {
+    font-size: clamp(13px, 3vw, 17px);
+    color: var(--white);
+    line-height: 1.9;
+    text-shadow: 3px 3px 0 rgba(204,0,0,0.4);
+  }
+  .header h1 span { color: var(--red-bright); }
+
+  .progress-bar { margin-bottom: 28px; }
+
+  .progress-label {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--gray);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .progress-track {
+    height: 12px;
+    background: #1a1a1a;
+    border: 2px solid var(--red);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red-dark), var(--red-bright));
+    transition: width 0.4s steps(10);
+  }
+
+  .question-num {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 14px;
+    letter-spacing: 3px;
+  }
+
+  .question-text {
+    font-size: clamp(9px, 2vw, 11px);
+    line-height: 2.1;
+    margin-bottom: 28px;
+    color: var(--white);
+    min-height: 56px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .option-btn {
+    background: #181818;
+    border: 2px solid #2a2a2a;
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(7px, 1.4vw, 9px);
+    padding: 13px 14px 13px 38px;
+    text-align: left;
+    cursor: pointer;
+    line-height: 1.9;
+    transition: all 0.1s steps(2);
+    position: relative;
+  }
+
+  .option-btn::before {
+    content: attr(data-key);
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--red);
+  }
+
+  .option-btn:hover {
+    border-color: var(--red);
+    background: #1f0000;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--red);
+    color: var(--white);
+  }
+
+  .option-btn:active { transform: translate(0,0); box-shadow: none; }
+
+  .option-btn.selected {
+    border-color: var(--white);
+    background: #1f0000;
+    box-shadow: 4px 4px 0 #444;
+    color: var(--white);
+  }
+
+  /* KİŞİLİK KARTI */
+  .result-screen { display: none; }
+  .result-screen.active { display: block; }
+
+  .personality-card {
+    background: #0d0d0d;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 0 3px #0a0a0a, 0 0 0 6px var(--red);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .card-banner {
+    background: var(--red);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-banner-text {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: 3px;
+  }
+
+  .card-banner-dots { display: flex; gap: 6px; }
+  .card-banner-dots span { width: 10px; height: 10px; background: rgba(255,255,255,0.4); display: block; }
+
+  .card-body { display: flex; }
+
+  .card-image-col {
+    width: 200px;
+    min-width: 200px;
+    background: #0a0a0a;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-right: 3px solid var(--red);
+    overflow: hidden;
+  }
+
+  .card-image-col img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    object-position: bottom;
+    image-rendering: pixelated;
+    display: block;
+  }
+
+  .card-info-col {
+    flex: 1;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-sen-bir {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--gray);
+    letter-spacing: 3px;
+  }
+
+  .card-name {
+    font-size: clamp(11px, 2.2vw, 15px);
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .card-divider {
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 6px, transparent 6px, transparent 12px);
+  }
+
+  .card-desc {
+    font-family: 'VT323', monospace;
+    font-size: clamp(14px, 2.2vw, 16px);
+    line-height: 1.55;
+    color: #ccc;
+  }
+
+  .card-roles-title {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+
+  .card-roles { display: flex; flex-direction: column; gap: 4px; }
+
+  .card-role-item {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--white);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .card-role-item::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+  }
+
+  .card-chips { display: flex; gap: 7px; flex-wrap: wrap; }
+
+  .chip {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    padding: 3px 9px;
+    border: 2px solid var(--red);
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+
+  .card-footer {
+    background: #0d0d0d;
+    border-top: 2px solid #1a1a1a;
+    padding: 8px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-footer-tog {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+
+  .card-footer-date {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: #333;
+  }
+
+  @media (max-width: 500px) {
+    .card-body { flex-direction: column; }
+    .card-image-col {
+      width: 100%; min-width: unset;
+      border-right: none;
+      border-bottom: 3px solid var(--red);
+      height: 180px;
+    }
+    .card-image-col img { height: 180px; }
+  }
+
+  .restart-btn {
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 14px 26px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.1s steps(2);
+  }
+
+  .restart-btn:hover {
+    background: var(--red-bright);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--white);
+  }
+
+  .tog-footer {
+    text-align: center;
+    margin-top: 18px;
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: #333;
+    letter-spacing: 3px;
+  }
+  .tog-footer span { color: var(--red); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="pixel-box">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="header" id="header-area">
+      <span class="tag">▶ TOG × 8 MART 2026</span>
+      <h1>HANGİ TOG<br><span>KADINISİN?</span></h1>
+    </div>
+
+    <div id="quiz-screen">
+      <div class="progress-bar">
+        <div class="progress-label" id="progress-label">SORU 1 / 5</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+        </div>
+      </div>
+      <div class="question-num" id="question-num">// SORU_01</div>
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options-container"></div>
+    </div>
+
+    <div class="result-screen" id="result-screen">
+      <div class="personality-card">
+        <div class="card-banner">
+          <span class="card-banner-text">▶ TOG KİŞİLİK KARTI</span>
+          <div class="card-banner-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-image-col">
+            <img id="card-img" src="" alt="karakter" />
+          </div>
+          <div class="card-info-col">
+            <div class="card-sen-bir">SEN BİR</div>
+            <div class="card-name" id="card-name"></div>
+            <div class="card-divider"></div>
+            <div class="card-desc" id="card-desc"></div>
+            <div>
+              <div class="card-roles-title">// GRUPTA SENİN ROLÜN</div>
+              <div class="card-roles" id="card-roles"></div>
+            </div>
+            <div class="card-chips" id="card-chips"></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-footer-tog">TOG — TOPLUM GÖNÜLLÜLERİ VAKFI</span>
+          <span class="card-footer-date">8 MART 2026</span>
+        </div>
+      </div>
+      <button class="restart-btn" onclick="restart()">▶ TEKRAR OYNA</button>
+    </div>
+  </div>
+  <div class="tog-footer">TOG &mdash; <span>TOPLUM GÖNÜLLÜLERİ VAKFI</span></div>
+</div>
+
+<script>
+  var CHARS = {
+    A: {
+      name: '🔥 Meydan Okuyan',
+      img: 'karakter1.png',
+      text: 'Sen TOG\'un sesi ve cesaretsin. Haksızlık gördüğünde ilk kalkan, kalabalığı harekete geçiren sensin. Bazen tek başına bile olsan susmuyorsun — çünkü biliyorsun ki bir ses yeter, yankısı büyür. 8 Mart\'ta sahne senin.',
+      roles: ['Kampanya ve etkinliklerde öncü', 'Zor konuşmaları başlatan', 'Grubu harekete geçiren'],
+      keywords: ['CESARET', 'SES', 'EYLEM']
+    },
+    B: {
+      name: '🌱 Köklü',
+      img: 'karakter2.png',
+      text: 'Sen TOG\'un hafızası ve temelisin. Gürültü dindiğinde hâlâ orada olan sensin — araştıran, belgeleyen, sürdüren. Değişim sabır ister, bunu en iyi sen bilirsin. Kökler ne kadar derinde olursa, ağaç o kadar yükseğe çıkar.',
+      roles: ['Projelerde süreci takip eden', 'Bilgiyi ve belleği koruyan', 'Uzun vadeli planları ayakta tutan'],
+      keywords: ['SABIR', 'HAFIZA', 'KÖKLÜ']
+    },
+    C: {
+      name: '✨ Bağ Kuran',
+      img: 'karakter3.png',
+      text: 'Sen TOG\'un kalbi ve dayanışmasısın. İnsanların birbirini bulmasını sağlayan, toplumu topluluk yapan sensin. Güçlü olmak için tek başına olmak zorunda değilsin — bunu herkese hatırlatıyorsun. Seninle her şey daha sıcak.',
+      roles: ['Yeni üyeleri kucaklayan', 'Çatışmaları yumuşatan', 'Ağ kurma ve iletişimde güçlü'],
+      keywords: ['DAYANIŞMA', 'BAĞLANTI', 'SICAKLIK']
+    },
+    D: {
+      name: '🎨 Dönüştüren',
+      img: 'karakter4.png',
+      text: 'Sen TOG\'un hikayesi ve dönüşümüsün. Görünmeyeni görünür kılan, duyulmayanı anlatılabilir yapan sensin. Bir tasarım, bir kelime, bir kare — elinden geçen her şey anlam kazanıyor. Değişimin yüzü senin yüzün.',
+      roles: ['Fikirleri görselleştiren', 'Sosyal medya ve içerik üretiminde güçlü', 'Grubun hikayesini anlatan'],
+      keywords: ['YARATICI', 'HİKAYE', 'DÖNÜŞÜM']
+    }
+  };
+
+  var QUESTIONS = [
+    {
+      text: 'Seni en iyi tanımlayan şey nedir?',
+      options: [
+        { text: 'Bir şeyin yanlış olduğunu biliyorsam susamam.', char: 'A' },
+        { text: 'Acele etmem, ama bırakmam da.', char: 'B' },
+        { text: 'Etrafımdaki insanların iyi hissetmesi benim için önemli.', char: 'C' },
+        { text: 'Anlatamazsam eksik kalır, bir şekilde ifade ederim.', char: 'D' }
+      ]
+    },
+    {
+      text: 'Kampüste haksız bir uygulama olduğunu öğrendin. Ne yaparsın?',
+      options: [
+        { text: 'Hemen arkadaşlarımı toplarım, sesimizi duyuracağız.', char: 'A' },
+        { text: 'Önce belgeleri incelerim, ne zaman başladı, neden devam ediyor.', char: 'B' },
+        { text: 'Etkilenenleri dinlerim, ne istediklerini anlamaya çalışırım.', char: 'C' },
+        { text: 'Durumu görünür kılacak bir içerik üretirim.', char: 'D' }
+      ]
+    },
+    {
+      text: 'Grup projesinde senin rolün genellikle ne olur?',
+      options: [
+        { text: 'Sunum yapan, grubu temsil eden.', char: 'A' },
+        { text: 'Araştırmayı yapan, her şeyin sağlam durmasını sağlayan.', char: 'B' },
+        { text: 'Grubu bir arada tutan, moralimizi yüksek tutan.', char: 'C' },
+        { text: 'Slaytı, görseli, metni hazırlayan.', char: 'D' }
+      ]
+    },
+    {
+      text: '8 Mart\'ta elinde bir megafon var. Ne söylersin?',
+      options: [
+        { text: 'Hazırladığım bir slogan var, tüm meydana haykırırım.', char: 'A' },
+        { text: 'Verileri bilirim, somut bir şey söylerim.', char: 'B' },
+        { text: 'Yanımdaki herkese megafonu uzatırım, herkesin sesi duyulsun.', char: 'C' },
+        { text: 'Söylemek yerine o anı kaydederim, belki bir afiş olur.', char: 'D' }
+      ]
+    },
+    {
+      text: 'Favori TOG anın hangisine benzer?',
+      options: [
+        { text: 'Bir kampanya başlatıp yayıldığını görmek.', char: 'A' },
+        { text: 'Uzun süren bir projenin sonuçlandığını görmek.', char: 'B' },
+        { text: 'Yeni biriyle tanışıp "seninle çalışmak çok güzeldi" demesini duymak.', char: 'C' },
+        { text: 'Yaptığın bir içeriğin insanları etkilediğini görmek.', char: 'D' }
+      ]
+    }
+  ];
+
+  var KEYS = ['A', 'B', 'C', 'D'];
+  var current = 0;
+  var scores = { A: 0, B: 0, C: 0, D: 0 };
+
+  function renderQuestion() {
+    var q = QUESTIONS[current];
+    document.getElementById('progress-label').textContent = 'SORU ' + (current + 1) + ' / ' + QUESTIONS.length;
+    document.getElementById('progress-fill').style.width = (((current + 1) / QUESTIONS.length) * 100) + '%';
+    document.getElementById('question-num').textContent = '// SORU_0' + (current + 1);
+    document.getElementById('question-text').textContent = q.text;
+
+    var container = document.getElementById('options-container');
+    container.innerHTML = '';
+    q.options.forEach(function(opt, i) {
+      var btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.setAttribute('data-key', KEYS[i]);
+      btn.textContent = opt.text;
+      btn.onclick = (function(b, c) { return function() { selectOption(b, c, container); }; })(btn, opt.char);
+      container.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, char, container) {
+    container.querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    scores[char]++;
+    setTimeout(function() {
+      current++;
+      if (current < QUESTIONS.length) { renderQuestion(); } else { showResult(); }
+    }, 350);
+  }
+
+  function showResult() {
+    var winner = Object.entries(scores).sort(function(a, b) { return b[1] - a[1]; })[0][0];
+    var char = CHARS[winner];
+
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('header-area').style.display = 'none';
+    document.getElementById('result-screen').classList.add('active');
+
+    document.getElementById('card-img').src = char.img;
+    document.getElementById('card-name').textContent = char.name;
+    document.getElementById('card-desc').textContent = char.text;
+
+    var rolesDiv = document.getElementById('card-roles');
+    rolesDiv.innerHTML = '';
+    char.roles.forEach(function(role) {
+      var item = document.createElement('div');
+      item.className = 'card-role-item';
+      item.textContent = role;
+      rolesDiv.appendChild(item);
+    });
+
+    var chipsDiv = document.getElementById('card-chips');
+    chipsDiv.innerHTML = '';
+    char.keywords.forEach(function(kw) {
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = kw;
+      chipsDiv.appendChild(chip);
+    });
+  }
+
+  function restart() {
+    current = 0;
+    scores = { A: 0, B: 0, C: 0, D: 0 };
+    document.getElementById('quiz-screen').style.display = 'block';
+    document.getElementById('header-area').style.display = 'block';
+    document.getElementById('result-screen').classList.remove('active');
+    renderQuestion();
+  }
+
+  renderQuestion();
+</script>
+</body>
+</html>
