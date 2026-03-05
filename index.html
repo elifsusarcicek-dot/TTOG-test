@@ -35,10 +35,7 @@
       repeating-linear-gradient(90deg, transparent, transparent 32px, rgba(204,0,0,0.03) 32px, rgba(204,0,0,0.03) 33px);
   }
 
-  .container {
-    width: 100%;
-    max-width: 680px;
-  }
+  .container { width: 100%; max-width: 700px; }
 
   .pixel-box {
     background: var(--panel);
@@ -53,8 +50,7 @@
 
   .corner {
     position: absolute;
-    width: 14px;
-    height: 14px;
+    width: 14px; height: 14px;
     background: var(--red);
   }
   .corner.tl { top: -3px; left: -3px; }
@@ -62,7 +58,6 @@
   .corner.bl { bottom: -3px; left: -3px; }
   .corner.br { bottom: -3px; right: -3px; }
 
-  /* SCANLINE */
   body::after {
     content: '';
     position: fixed;
@@ -72,11 +67,7 @@
     z-index: 999;
   }
 
-  /* HEADER */
-  .header {
-    text-align: center;
-    margin-bottom: 36px;
-  }
+  .header { text-align: center; margin-bottom: 36px; }
 
   .header .tag {
     font-family: 'VT323', monospace;
@@ -96,10 +87,8 @@
     line-height: 1.9;
     text-shadow: 3px 3px 0 rgba(204,0,0,0.4);
   }
-
   .header h1 span { color: var(--red-bright); }
 
-  /* PROGRESS */
   .progress-bar { margin-bottom: 28px; }
 
   .progress-label {
@@ -123,7 +112,6 @@
     transition: width 0.4s steps(10);
   }
 
-  /* QUESTION */
   .question-num {
     font-family: 'VT323', monospace;
     font-size: 20px;
@@ -140,12 +128,7 @@
     min-height: 56px;
   }
 
-  /* OPTIONS */
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
 
   .option-btn {
     background: #181818;
@@ -164,8 +147,7 @@
   .option-btn::before {
     content: attr(data-key);
     position: absolute;
-    left: 12px;
-    top: 50%;
+    left: 12px; top: 50%;
     transform: translateY(-50%);
     font-family: 'VT323', monospace;
     font-size: 22px;
@@ -180,10 +162,7 @@
     color: var(--white);
   }
 
-  .option-btn:active {
-    transform: translate(0,0);
-    box-shadow: none;
-  }
+  .option-btn:active { transform: translate(0,0); box-shadow: none; }
 
   .option-btn.selected {
     border-color: var(--white);
@@ -192,66 +171,159 @@
     color: var(--white);
   }
 
-  /* RESULT */
-  .result-screen { display: none; text-align: center; }
+  /* KİŞİLİK KARTI */
+  .result-screen { display: none; }
   .result-screen.active { display: block; }
 
-  .result-icon {
-    font-size: 68px;
-    display: block;
-    margin: 0 auto 20px;
-    animation: float 2s ease-in-out infinite;
+  .personality-card {
+    background: #0d0d0d;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 0 3px #0a0a0a, 0 0 0 6px var(--red);
+    overflow: hidden;
+    margin-bottom: 24px;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  .card-banner {
+    background: var(--red);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .result-label {
+  .card-banner-text {
     font-family: 'VT323', monospace;
     font-size: 18px;
-    color: var(--gray);
-    letter-spacing: 4px;
-    margin-bottom: 10px;
+    color: #fff;
+    letter-spacing: 3px;
   }
 
-  .result-name {
-    font-size: clamp(13px, 3.5vw, 18px);
-    color: var(--white);
-    line-height: 1.7;
-    margin-bottom: 22px;
-  }
+  .card-banner-dots { display: flex; gap: 6px; }
+  .card-banner-dots span { width: 10px; height: 10px; background: rgba(255,255,255,0.4); display: block; }
 
-  .result-divider {
-    height: 3px;
-    margin: 18px 0;
-    background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 8px, transparent 8px, transparent 16px);
-  }
+  .card-body { display: flex; }
 
-  .result-text {
-    font-family: 'VT323', monospace;
-    font-size: clamp(17px, 3.5vw, 21px);
-    line-height: 1.65;
-    color: #cccccc;
-    margin-bottom: 26px;
-  }
-
-  .result-chips {
+  .card-image-col {
+    width: 200px;
+    min-width: 200px;
+    background: #0a0a0a;
     display: flex;
+    align-items: flex-end;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
+    border-right: 3px solid var(--red);
+    overflow: hidden;
   }
+
+  .card-image-col img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    object-position: bottom;
+    image-rendering: pixelated;
+    display: block;
+  }
+
+  .card-info-col {
+    flex: 1;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-sen-bir {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--gray);
+    letter-spacing: 3px;
+  }
+
+  .card-name {
+    font-size: clamp(11px, 2.2vw, 15px);
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .card-divider {
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 6px, transparent 6px, transparent 12px);
+  }
+
+  .card-desc {
+    font-family: 'VT323', monospace;
+    font-size: clamp(14px, 2.2vw, 16px);
+    line-height: 1.55;
+    color: #ccc;
+  }
+
+  .card-roles-title {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+
+  .card-roles { display: flex; flex-direction: column; gap: 4px; }
+
+  .card-role-item {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--white);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .card-role-item::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+  }
+
+  .card-chips { display: flex; gap: 7px; flex-wrap: wrap; }
 
   .chip {
     font-family: 'VT323', monospace;
-    font-size: 15px;
-    padding: 4px 12px;
+    font-size: 13px;
+    padding: 3px 9px;
     border: 2px solid var(--red);
     color: var(--white);
     letter-spacing: 1px;
+  }
+
+  .card-footer {
+    background: #0d0d0d;
+    border-top: 2px solid #1a1a1a;
+    padding: 8px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-footer-tog {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+
+  .card-footer-date {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: #333;
+  }
+
+  @media (max-width: 500px) {
+    .card-body { flex-direction: column; }
+    .card-image-col {
+      width: 100%; min-width: unset;
+      border-right: none;
+      border-bottom: 3px solid var(--red);
+      height: 180px;
+    }
+    .card-image-col img { height: 180px; }
   }
 
   .restart-btn {
@@ -273,7 +345,6 @@
     box-shadow: 4px 4px 0 var(--white);
   }
 
-  /* FOOTER */
   .tog-footer {
     text-align: center;
     margin-top: 18px;
@@ -282,13 +353,12 @@
     color: #333;
     letter-spacing: 3px;
   }
-
   .tog-footer span { color: var(--red); }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="pixel-box" id="quiz-box">
+  <div class="pixel-box">
     <div class="corner tl"></div>
     <div class="corner tr"></div>
     <div class="corner bl"></div>
@@ -312,48 +382,71 @@
     </div>
 
     <div class="result-screen" id="result-screen">
-      <span class="result-icon" id="result-icon"></span>
-      <div class="result-label">SEN BİR</div>
-      <div class="result-name" id="result-name"></div>
-      <div class="result-divider"></div>
-      <div class="result-text" id="result-text"></div>
-      <div class="result-chips" id="result-chips"></div>
+      <div class="personality-card">
+        <div class="card-banner">
+          <span class="card-banner-text">▶ TOG KİŞİLİK KARTI</span>
+          <div class="card-banner-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-image-col">
+            <img id="card-img" src="" alt="karakter" />
+          </div>
+          <div class="card-info-col">
+            <div class="card-sen-bir">SEN BİR</div>
+            <div class="card-name" id="card-name"></div>
+            <div class="card-divider"></div>
+            <div class="card-desc" id="card-desc"></div>
+            <div>
+              <div class="card-roles-title">// GRUPTA SENİN ROLÜN</div>
+              <div class="card-roles" id="card-roles"></div>
+            </div>
+            <div class="card-chips" id="card-chips"></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-footer-tog">TOG — TOPLUM GÖNÜLLÜLERİ VAKFI</span>
+          <span class="card-footer-date">8 MART 2026</span>
+        </div>
+      </div>
       <button class="restart-btn" onclick="restart()">▶ TEKRAR OYNA</button>
     </div>
   </div>
-
   <div class="tog-footer">TOG &mdash; <span>TOPLUM GÖNÜLLÜLERİ VAKFI</span></div>
 </div>
 
 <script>
-  const CHARS = {
+  var CHARS = {
     A: {
       name: '🔥 Meydan Okuyan',
-      icon: '🔥',
+      img: 'karakter1.png',
       text: 'Sen TOG\'un sesi ve cesaretsin. Haksızlık gördüğünde ilk kalkan, kalabalığı harekete geçiren sensin. Bazen tek başına bile olsan susmuyorsun — çünkü biliyorsun ki bir ses yeter, yankısı büyür. 8 Mart\'ta sahne senin.',
+      roles: ['Kampanya ve etkinliklerde öncü', 'Zor konuşmaları başlatan', 'Grubu harekete geçiren'],
       keywords: ['CESARET', 'SES', 'EYLEM']
     },
     B: {
       name: '🌱 Köklü',
-      icon: '🌱',
+      img: 'karakter2.png',
       text: 'Sen TOG\'un hafızası ve temelisin. Gürültü dindiğinde hâlâ orada olan sensin — araştıran, belgeleyen, sürdüren. Değişim sabır ister, bunu en iyi sen bilirsin. Kökler ne kadar derinde olursa, ağaç o kadar yükseğe çıkar.',
+      roles: ['Projelerde süreci takip eden', 'Bilgiyi ve belleği koruyan', 'Uzun vadeli planları ayakta tutan'],
       keywords: ['SABIR', 'HAFIZA', 'KÖKLÜ']
     },
     C: {
       name: '✨ Bağ Kuran',
-      icon: '✨',
+      img: 'karakter3.png',
       text: 'Sen TOG\'un kalbi ve dayanışmasısın. İnsanların birbirini bulmasını sağlayan, toplumu topluluk yapan sensin. Güçlü olmak için tek başına olmak zorunda değilsin — bunu herkese hatırlatıyorsun. Seninle her şey daha sıcak.',
+      roles: ['Yeni üyeleri kucaklayan', 'Çatışmaları yumuşatan', 'Ağ kurma ve iletişimde güçlü'],
       keywords: ['DAYANIŞMA', 'BAĞLANTI', 'SICAKLIK']
     },
     D: {
       name: '🎨 Dönüştüren',
-      icon: '🎨',
+      img: 'karakter4.png',
       text: 'Sen TOG\'un hikayesi ve dönüşümüsün. Görünmeyeni görünür kılan, duyulmayanı anlatılabilir yapan sensin. Bir tasarım, bir kelime, bir kare — elinden geçen her şey anlam kazanıyor. Değişimin yüzü senin yüzün.',
+      roles: ['Fikirleri görselleştiren', 'Sosyal medya ve içerik üretiminde güçlü', 'Grubun hikayesini anlatan'],
       keywords: ['YARATICI', 'HİKAYE', 'DÖNÜŞÜM']
     }
   };
 
-  const QUESTIONS = [
+  var QUESTIONS = [
     {
       text: 'Seni en iyi tanımlayan şey nedir?',
       options: [
@@ -401,25 +494,25 @@
     }
   ];
 
-  const KEYS = ['A', 'B', 'C', 'D'];
-  let current = 0;
-  let scores = { A: 0, B: 0, C: 0, D: 0 };
+  var KEYS = ['A', 'B', 'C', 'D'];
+  var current = 0;
+  var scores = { A: 0, B: 0, C: 0, D: 0 };
 
   function renderQuestion() {
-    const q = QUESTIONS[current];
+    var q = QUESTIONS[current];
     document.getElementById('progress-label').textContent = 'SORU ' + (current + 1) + ' / ' + QUESTIONS.length;
     document.getElementById('progress-fill').style.width = (((current + 1) / QUESTIONS.length) * 100) + '%';
     document.getElementById('question-num').textContent = '// SORU_0' + (current + 1);
     document.getElementById('question-text').textContent = q.text;
 
-    const container = document.getElementById('options-container');
+    var container = document.getElementById('options-container');
     container.innerHTML = '';
     q.options.forEach(function(opt, i) {
-      const btn = document.createElement('button');
+      var btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.setAttribute('data-key', KEYS[i]);
       btn.textContent = opt.text;
-      btn.onclick = function() { selectOption(btn, opt.char, container); };
+      btn.onclick = (function(b, c) { return function() { selectOption(b, c, container); }; })(btn, opt.char);
       container.appendChild(btn);
     });
   }
@@ -430,30 +523,35 @@
     scores[char]++;
     setTimeout(function() {
       current++;
-      if (current < QUESTIONS.length) {
-        renderQuestion();
-      } else {
-        showResult();
-      }
+      if (current < QUESTIONS.length) { renderQuestion(); } else { showResult(); }
     }, 350);
   }
 
   function showResult() {
-    const winner = Object.entries(scores).sort(function(a, b) { return b[1] - a[1]; })[0][0];
-    const char = CHARS[winner];
+    var winner = Object.entries(scores).sort(function(a, b) { return b[1] - a[1]; })[0][0];
+    var char = CHARS[winner];
 
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('header-area').style.display = 'none';
     document.getElementById('result-screen').classList.add('active');
 
-    document.getElementById('result-icon').textContent = char.icon;
-    document.getElementById('result-name').textContent = char.name;
-    document.getElementById('result-text').textContent = char.text;
+    document.getElementById('card-img').src = char.img;
+    document.getElementById('card-name').textContent = char.name;
+    document.getElementById('card-desc').textContent = char.text;
 
-    const chipsDiv = document.getElementById('result-chips');
+    var rolesDiv = document.getElementById('card-roles');
+    rolesDiv.innerHTML = '';
+    char.roles.forEach(function(role) {
+      var item = document.createElement('div');
+      item.className = 'card-role-item';
+      item.textContent = role;
+      rolesDiv.appendChild(item);
+    });
+
+    var chipsDiv = document.getElementById('card-chips');
     chipsDiv.innerHTML = '';
     char.keywords.forEach(function(kw) {
-      const chip = document.createElement('div');
+      var chip = document.createElement('div');
       chip.className = 'chip';
       chip.textContent = kw;
       chipsDiv.appendChild(chip);
